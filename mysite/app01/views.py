@@ -12,3 +12,5 @@ def user_list(request):
 def user_add(request):
     return render(request, 'user_add.html')
 
+def tpl(request):
+    return render(request, 'tpl.html')
