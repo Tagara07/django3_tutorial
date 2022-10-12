@@ -1,6 +1,8 @@
 from urllib import request
 from django.shortcuts import render, HttpResponse, redirect
 
+from app01.models import *
+
 # Create your views here.
 
 def index(request):
@@ -52,3 +54,33 @@ def login(request):
  
     # return HttpResponse('登录失败')
     return render(request, 'login.html', {'error_msg':'用户名或密码错误'})
+
+def orm(request):
+    # Department.objects.create(title='销售部')
+    # Department.objects.create(title='IT部')
+    # Department.objects.create(title='运营部')
+
+    # UserInfo.objects.create(name='mengnan', password='123', age='19', size=10)
+    # UserInfo.objects.create(name='xiaopang', password='666', age='29', size=15  )
+
+    # UserInfo.objects.filter(id=2).delete()
+    # Department.objects.all().delete()
+
+    # data_list = UserInfo.objects.all()
+    # for obj in data_list:
+    #     print(obj.id, obj.name, obj.password, obj.age)
+
+    # row_obj = UserInfo.objects.filter(id=1).first()
+    # print(row_obj.id, row_obj.name, row_obj.password, row_obj.age)
+
+    UserInfo.objects.all().update(password=999)
+    UserInfo.objects.filter(name='mengnan').update(password=99)
+    return HttpResponse('成功')
+
+
+def info_list(request):
+
+    data_list = UserInfo.objects.all()
+    # print(data_list)
+
+    return render(request, 'info_list.html', {'data_list':data_list})

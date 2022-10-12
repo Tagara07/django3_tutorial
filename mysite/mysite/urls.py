@@ -25,5 +25,7 @@ urlpatterns = [
     path('tpl/', views.tpl),
     # path('news/', views.news),
     path('something/', views.something),
-    path('login/', views.login)
+    path('login/', views.login),
+    path('orm/', views.orm),
+    path('info/list/', views.info_list),
 ]
