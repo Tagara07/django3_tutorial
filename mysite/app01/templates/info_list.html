@@ -6,6 +6,7 @@
     </head>
     <body>
         <h1>INFO列表</h1>
+        <a href="/info/add/">添加</a>
         <table border="'1">
             <thead>
                 <tr>
@@ -13,6 +14,7 @@
                     <th>姓名</th>
                     <th>密码</th>
                     <th>年龄</th>
+                    <th>操作</th>
                 </tr>
             </thead>
             <tbody>
@@ -22,6 +24,9 @@
                     <td>{{ obj.name }}</td>
                     <td>{{ obj.password }}</td>
                     <td>{{ obj.age }}</td>
+                    <td>
+                        <a href="/info/delete/?nid={{ obj.id }}">删除</a>
+                    </td>
                 </tr>
             {% endfor %}
             </tbody>

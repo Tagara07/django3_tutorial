@@ -84,3 +84,23 @@ def info_list(request):
     # print(data_list)
 
     return render(request, 'info_list.html', {'data_list':data_list})
+
+def info_add(request):
+    if request.method == 'GET':
+        return render(request, 'info_add.html')
+
+    user = request.POST.get('user')
+    pwd = request.POST.get('pwd')
+    age = request.POST.get('age')
+    size = request.POST.get('size')
+
+    UserInfo.objects.create(name=user, password=pwd, age=age, size=size)
+
+    # return HttpResponse('添加成功')
+    return redirect('/info/list')
+
+def info_delete(request):
+    nid = request.GET.get('nid')
+    UserInfo.objects.filter(id=nid).delete()
+    # return HttpResponse('删除成功')
+    return redirect('/info/list')
