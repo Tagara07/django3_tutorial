@@ -15,19 +15,23 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from app01 import views
+from app01 import views as views01
+from app02 import views as views02
 
 urlpatterns = [
     # path('admin/', admin.site.urls), 
-    path('index/', views.index), 
-    path('user/list/', views.user_list), 
-    path('user/add/', views.user_add),
-    path('tpl/', views.tpl),
+    path('index/', views01.index), 
+    path('user/list/', views01.user_list), 
+    path('user/add/', views01.user_add),
+    path('tpl/', views01.tpl),
     # path('news/', views.news),
-    path('something/', views.something),
-    path('login/', views.login),
-    path('orm/', views.orm),
-    path('info/list/', views.info_list),
-    path('info/add/', views.info_add),
-    path('info/delete/', views.info_delete),
+    path('something/', views01.something),
+    path('login/', views01.login),
+    path('orm/', views01.orm),
+    path('info/list/', views01.info_list),
+    path('info/add/', views01.info_add),
+    path('info/delete/', views01.info_delete),
+    path('depart/list/', views02.depart_list),
+    path('depart/add/', views02.depart_add),
+    path('from_base/', views02.from_base),
 ]
