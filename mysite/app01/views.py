@@ -8,8 +8,8 @@ from app01.models import *
 def index(request):
     return HttpResponse('欢迎使用')
 
-def user_list(request):
-    return render(request, 'user_list.html')
+def user_list01(request):
+    return render(request, 'user_list01.html')
 
 def user_add(request):
     return render(request, 'user_add.html')

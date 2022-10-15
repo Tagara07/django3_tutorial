@@ -21,7 +21,7 @@ from app02 import views as views02
 urlpatterns = [
     # path('admin/', admin.site.urls), 
     path('index/', views01.index), 
-    path('user/list/', views01.user_list), 
+    path('user/list01/', views01.user_list01), 
     path('user/add/', views01.user_add),
     path('tpl/', views01.tpl),
     # path('news/', views.news),
@@ -33,5 +33,8 @@ urlpatterns = [
     path('info/delete/', views01.info_delete),
     path('depart/list/', views02.depart_list),
     path('depart/add/', views02.depart_add),
+    path('depart/delete/', views02.depart_delete),
+    path('depart/<int:nid>/edit/', views02.depart_edit),
+    path('user/list/', views02.user_list),
     path('from_base/', views02.from_base),
 ]
