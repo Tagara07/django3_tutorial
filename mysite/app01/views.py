@@ -11,7 +11,7 @@ def index(request):
 def user_list01(request):
     return render(request, 'user_list01.html')
 
-def user_add(request):
+def user_add01(request):
     return render(request, 'user_add.html')
 
 def tpl(request):

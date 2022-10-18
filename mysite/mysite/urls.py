@@ -20,9 +20,10 @@ from app02 import views as views02
 
 urlpatterns = [
     # path('admin/', admin.site.urls), 
+    path('from_base/', views02.from_base),
     path('index/', views01.index), 
     path('user/list01/', views01.user_list01), 
-    path('user/add/', views01.user_add),
+    path('user/add01/', views01.user_add01),
     path('tpl/', views01.tpl),
     # path('news/', views.news),
     path('something/', views01.something),
@@ -36,5 +37,6 @@ urlpatterns = [
     path('depart/delete/', views02.depart_delete),
     path('depart/<int:nid>/edit/', views02.depart_edit),
     path('user/list/', views02.user_list),
-    path('from_base/', views02.from_base),
+    path('user/add/', views02.user_add),
+    path('user/model/form/add/', views02.user_model_form_add),
 ]

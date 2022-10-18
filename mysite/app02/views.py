@@ -1,8 +1,14 @@
-from pickletools import read_uint1
-from turtle import title
+from dataclasses import fields
+from tkinter import Widget
 from django.shortcuts import render, redirect
 from app02 import models
+from django import forms
+
 # Create your views here.
+
+def from_base(request):
+
+    return render(request, 'from_base.html')
 
 def depart_list(request):
     '''部门列表'''
@@ -37,8 +43,65 @@ def depart_edit(request, nid):
 def user_list(request):
     return render(request, 'user_list.html')
 
+def user_list(request):
+    queryset = models.UserInfo.objects.all() 
+    # for obj in queryset:
+        # print(obj.id, obj.name, obj.create_time.strftime('%Y-%m-%d'), obj.get_gender_display(), obj.depart.title)
+    return render(request, 'user_list.html', {'queryset':queryset})
 
-def from_base(request):
+def user_add(request):
+    if request.method == 'GET':
+        context = {
+            'gender_choices': models.UserInfo.gender_choices,
+            'depart_list': models.Department.objects.all()
+        } 
+        return render(request, 'user_add.html', context)
 
-    return render(request, 'from_base.html')
+    user = request.POST.get('user')
+    pwd = request.POST.get('pwd')
+    age = request.POST.get('age')
+    account = request.POST.get('ac')
+    ctime = request.POST.get('ctime')
+    gender = request.POST.get('gd')
+    depart_id = request.POST.get('dp')
 
+    models.UserInfo.objects.create(name=user, password=pwd, age=age, 
+                                account=account, create_time=ctime, gender=gender, 
+                                depart_id=depart_id)
+
+    return redirect('/user/list/')
+
+class UserModelForm(forms.ModelForm):
+    name = forms.CharField(min_length=3, label='用户名')
+    # password = forms.CharField(min_length=3, label='密码', validators=)
+    
+    class Meta:
+        model = models.UserInfo
+        fields = ['name', 'password', 'age', 'create_time', 'gender', 'depart']
+        # widgets = {
+        #     'name': forms.TextInput(attrs={'class':'form-control'}),
+        #     'password': forms.TextInput(attrs={'class':'form-control'}),
+        #     'age': forms.TextInput(attrs={'class':'form-control'}),
+        # }
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__( *args, **kwargs)
+
+        for name, field in self.fields.items():
+            # if name == 'password':
+                # continue
+            field.widget.attrs = {'class':'form-control', 'placeholder':field.label}
+
+
+def user_model_form_add(request):
+    if request.method == 'GET':
+        form = UserModelForm()
+        return render(request, 'user_model_form_add.html', {'form':form})
+
+    form = UserModelForm(data=request.POST)
+    if form.is_valid():
+        # print(form.cleaned_data)
+        form.save()
+        return redirect('/user/list/')
+    
+    return render(request, 'user_model_form_add.html', {'form':form})

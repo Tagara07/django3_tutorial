@@ -10,6 +10,9 @@ class Department(models.Model):
     # id = models.BigAutoField(primary_key=True, verbose_name='ID')
     title = models.CharField(max_length=32, verbose_name='标题')
 
+    def __str__(self) -> str:
+        return self.title
+
 class UserInfo(models.Model):
     '''员工表'''
     gender_choices= (
@@ -22,5 +25,5 @@ class UserInfo(models.Model):
     account = models.DecimalField(max_digits=10, decimal_places=2, default=0, verbose_name='账户余额')
     create_time = models.DateTimeField(verbose_name='入职时间')
     # depart = models.ForeignKey(to='Department', to_field='id', on_delete=models.CASCADE)
-    depart = models.ForeignKey(to='Department', to_field='id', null=True, blank=True, on_delete=models.SET_NULL)
+    depart = models.ForeignKey(to='Department', to_field='id', null=True, blank=True, on_delete=models.SET_NULL, verbose_name='部门')
     gender = models.SmallIntegerField(choices=gender_choices, verbose_name='性别')
