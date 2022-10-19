@@ -39,4 +39,10 @@ urlpatterns = [
     path('user/list/', views02.user_list),
     path('user/add/', views02.user_add),
     path('user/model/form/add/', views02.user_model_form_add),
+    path('user/<int:nid>/edit/', views02.user_edit),
+    path('user/<int:nid>/delete/', views02.user_delete),
+    path('pretty/list/', views02.pretty_list),
+    path('pretty/add/', views02.pretty_add),
+    path('pretty/<int:nid>/edit/', views02.pretty_edit),
+    path('pretty/<int:nid>/delete/', views02.pretty_delete), 
 ]

@@ -1,9 +1,8 @@
-from dataclasses import fields
-from tkinter import Widget
 from django.shortcuts import render, redirect
 from app02 import models
 from django import forms
-
+from django.core.validators import RegexValidator
+from django.core.exceptions import ValidationError
 # Create your views here.
 
 def from_base(request):
@@ -105,3 +104,111 @@ def user_model_form_add(request):
         return redirect('/user/list/')
     
     return render(request, 'user_model_form_add.html', {'form':form})
+
+def user_edit(request, nid):
+    row_object = models.UserInfo.objects.filter(id=nid).first()
+    
+    if request.method == 'GET':
+        form = UserModelForm(instance=row_object)
+        return render(request, 'user_edit.html', {'form':form})
+    
+    form = UserModelForm(data=request.POST, instance=row_object)
+    if form.is_valid:
+        # form.instance.字段名 = 值
+        form.save()
+        return redirect('/user/list/')
+    return render(request, 'user_edit.html', {'form':form})
+
+def user_delete(request, nid):
+    models.UserInfo.objects.filter(id=nid).delete()
+    return redirect('/user/list/')
+
+def pretty_list(request):
+    data_list = {}
+    search_data = request.GET.get('q', '')
+    if search_data:
+        data_list['mobile__contains'] = search_data
+
+    # res = models.PrettyNum.objects.filter(**data_list)
+    # models.PrettyNum.objects.filter(mobile='', id='')
+    queryset = models.PrettyNum.objects.filter(**data_list).order_by('-level')
+    return render (request, 'pretty_list.html', {'queryset':queryset, 'search_data':search_data})
+
+class PrettyModelForm(forms.ModelForm):
+    # 验证方式1
+    mobile = forms.CharField(
+        label='手机号',
+        validators=[RegexValidator(r'^1[3-9]\d{9}$', '手机号格式错误')]
+    )
+
+    class Meta:
+        model = models.PrettyNum
+        # fields = ['mobile', 'price', 'level', 'status']
+        fields = '__all__'
+        # exclude = ['level']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__( *args, **kwargs)
+        for name, field in self.fields.items():
+            field.widget.attrs = {'class':'form-control', 'placeholder':field.label}
+    
+    # 验证方式2
+    def clean_mobile(self):
+        txt_mobile = self.cleaned_data['mobile']
+
+        exits = models.PrettyNum.objects.exclude(id=self.instance.pk).filter(mobile=txt_mobile).exists()
+        if exits:
+            raise ValidationError('手机号已存在')
+        # if len(txt_mobile) != 11:
+            # raise ValidationError('格式错误')
+        return txt_mobile
+
+def pretty_add(request):
+    if request.method == 'GET':
+        form = PrettyModelForm()
+        return render(request, 'pretty_add.html', {'form':form})
+
+    form = PrettyModelForm(data=request.POST)
+    if form.is_valid():
+        # print(form.cleaned_data)
+        form.save()
+        return redirect('/pretty/list/')
+    
+    return render(request, 'pretty_add.html', {'form':form})
+
+class PrettyEditModelForm(forms.ModelForm):
+    # mobile = forms.CharField(disabled=True, label='手机号')
+    mobile = forms.CharField(
+        label='手机号',
+        validators=[RegexValidator(r'^1[3-9]\d{9}$', '手机号格式错误')]
+    )
+
+    # 验证方式1
+    class Meta:
+        model = models.PrettyNum
+        fields = ['mobile', 'price', 'level', 'status']
+        # fields = '__all__'
+        # exclude = ['level']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__( *args, **kwargs)
+        for name, field in self.fields.items():
+            field.widget.attrs = {'class':'form-control', 'placeholder':field.label}
+
+def pretty_edit(request, nid):
+    row_object = models.PrettyNum.objects.filter(id=nid).first()
+    
+    if request.method == 'GET':
+        form = PrettyEditModelForm(instance=row_object)
+        return render(request, 'pretty_edit.html', {'form':form})
+    
+    form = PrettyEditModelForm(data=request.POST, instance=row_object)
+    if form.is_valid:
+    #     # form.instance.字段名 = 值
+        form.save()
+        return redirect('/pretty/list/')
+    return render(request, 'pretty_edit.html', {'form':form})
+
+def pretty_delete(request, nid):
+    models.PrettyNum.objects.filter(id=nid).delete()
+    return redirect('/pretty/list/')

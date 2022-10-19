@@ -1,6 +1,3 @@
-from secrets import choice
-from tabnanny import verbose
-from turtle import title
 from django.db import models
 
 # Create your models here.
@@ -23,7 +20,25 @@ class UserInfo(models.Model):
     password = models.CharField(max_length=64, verbose_name='密码')
     age = models.IntegerField(verbose_name='年龄')
     account = models.DecimalField(max_digits=10, decimal_places=2, default=0, verbose_name='账户余额')
-    create_time = models.DateTimeField(verbose_name='入职时间')
+    # create_time = models.DateTimeField(verbose_name='入职时间')
+    create_time = models.DateField(verbose_name='入职时间')
     # depart = models.ForeignKey(to='Department', to_field='id', on_delete=models.CASCADE)
     depart = models.ForeignKey(to='Department', to_field='id', null=True, blank=True, on_delete=models.SET_NULL, verbose_name='部门')
     gender = models.SmallIntegerField(choices=gender_choices, verbose_name='性别')
+
+class PrettyNum(models.Model):
+    mobile = models.CharField(max_length=11, verbose_name='手机号')
+    price = models.IntegerField(verbose_name='价格')
+    level_choices = (
+        (1, '1级'),
+        (2, '2级'),
+        (3, '3级'),
+        (4, '4级'),
+    )
+    level = models.SmallIntegerField(choices=level_choices, default=1, verbose_name='级别')
+
+    status_choices = (
+        (1, '已占用'),
+        (2, '未占用'),
+    )
+    status = models.SmallIntegerField(choices=status_choices, default=2, verbose_name='状态')
