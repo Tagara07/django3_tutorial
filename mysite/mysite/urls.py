@@ -16,11 +16,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from app01 import views as views01
-from app02 import views as views02
+# from app02 import views as views02
+from app02.views import depart, user, pretty
 
 urlpatterns = [
     # path('admin/', admin.site.urls), 
-    path('from_base/', views02.from_base),
+    # path('from_base/', views02.from_base),
     path('index/', views01.index), 
     path('user/list01/', views01.user_list01), 
     path('user/add01/', views01.user_add01),
@@ -32,17 +33,17 @@ urlpatterns = [
     path('info/list/', views01.info_list),
     path('info/add/', views01.info_add),
     path('info/delete/', views01.info_delete),
-    path('depart/list/', views02.depart_list),
-    path('depart/add/', views02.depart_add),
-    path('depart/delete/', views02.depart_delete),
-    path('depart/<int:nid>/edit/', views02.depart_edit),
-    path('user/list/', views02.user_list),
-    path('user/add/', views02.user_add),
-    path('user/model/form/add/', views02.user_model_form_add),
-    path('user/<int:nid>/edit/', views02.user_edit),
-    path('user/<int:nid>/delete/', views02.user_delete),
-    path('pretty/list/', views02.pretty_list),
-    path('pretty/add/', views02.pretty_add),
-    path('pretty/<int:nid>/edit/', views02.pretty_edit),
-    path('pretty/<int:nid>/delete/', views02.pretty_delete), 
+    path('depart/list/', depart.depart_list),
+    path('depart/add/', depart.depart_add),
+    path('depart/delete/', depart.depart_delete),
+    path('depart/<int:nid>/edit/', depart.depart_edit),
+    path('user/list/', user.user_list),
+    path('user/add/', user.user_add),
+    path('user/model/form/add/', user.user_model_form_add),
+    path('user/<int:nid>/edit/', user.user_edit),
+    path('user/<int:nid>/delete/', user.user_delete),
+    path('pretty/list/', pretty.pretty_list),
+    path('pretty/add/', pretty.pretty_add),
+    path('pretty/<int:nid>/edit/', pretty.pretty_edit),
+    path('pretty/<int:nid>/delete/', pretty.pretty_delete), 
 ]
