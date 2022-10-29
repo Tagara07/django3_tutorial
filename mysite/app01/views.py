@@ -40,7 +40,7 @@ def something(request):
     # return render(request, 'something.html', {'title': '来了'})
     return redirect('https://baidu.com')
 
-def login(request):
+def login01(request):
     if request.method == 'GET':
         return render(request, 'login.html')
 

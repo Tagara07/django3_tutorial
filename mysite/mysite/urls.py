@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import path
 from app01 import views as views01
 # from app02 import views as views02
-from app02.views import depart, user, pretty
+from app02.views import depart, user, pretty, admin, account
 
 urlpatterns = [
     # path('admin/', admin.site.urls), 
@@ -28,7 +28,7 @@ urlpatterns = [
     path('tpl/', views01.tpl),
     # path('news/', views.news),
     path('something/', views01.something),
-    path('login/', views01.login),
+    path('login01/', views01.login01),
     path('orm/', views01.orm),
     path('info/list/', views01.info_list),
     path('info/add/', views01.info_add),
@@ -46,4 +46,12 @@ urlpatterns = [
     path('pretty/add/', pretty.pretty_add),
     path('pretty/<int:nid>/edit/', pretty.pretty_edit),
     path('pretty/<int:nid>/delete/', pretty.pretty_delete), 
+    # 管理员
+    path('admin/list/', admin.admin_list),
+    path('admin/add/', admin.admin_add),
+    path('admin/<int:nid>/edit/', admin.admin_edit),
+    path('admin/<int:nid>/delete/', admin.admin_delete),
+    path('admin/<int:nid>/reset/', admin.admin_reset),
+    # 登录
+    path('login/', account.login),
 ]
