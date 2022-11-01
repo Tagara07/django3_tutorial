@@ -1,21 +1,16 @@
 from django.utils.deprecation import MiddlewareMixin
+from django.shortcuts import HttpResponse, redirect
 
-class M1(MiddlewareMixin):
-    '''中间件1'''
-
+class AuthMiddleware(MiddlewareMixin):
+ 
     def process_request(self, request):
-        print('M1.进来了')
+        # 0.排除那些不需要登陆就能访问的页面
+        if request.path_info in ['/login/', '/image/code/']:
+            return
 
-    def process_response(self, request, response):
-        print('M1.走了')
-        return response
+        info_dict = request.session.get('info')
+        if info_dict:
+            return
 
-class M2(MiddlewareMixin):
-    '''中间件2'''
-
-    def process_request(self, request):
-        print('M2.进来了')
-
-    def process_response(self, request, response):
-        print('M2.走了')
-        return response
+        # 没有登陆过，重新回到登录页面
+        return redirect('/login/')

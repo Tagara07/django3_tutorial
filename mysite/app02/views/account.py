@@ -1,10 +1,15 @@
+import code
 from hashlib import md5
+from turtle import textinput
 from django.shortcuts import render, redirect, HttpResponse
 from django import forms
 
 from app02 import models
 from app02.utils.bootstrap import BootStrapForm
 from app02.utils.encrypt import md5
+from app02.utils.code  import check_code 
+from io import BytesIO
+
 
 class LoginForm(BootStrapForm):
     username = forms.CharField(
@@ -18,6 +23,12 @@ class LoginForm(BootStrapForm):
         required=True
         )
 
+    code = forms.CharField(
+        label='验证码',
+        widget=forms.TextInput,
+        required=True
+    )
+
     def clean_password(self):
         pwd = self.cleaned_data.get('password')
         return md5(pwd)
@@ -30,7 +41,16 @@ def login(request):
         return render(request, 'login.html', {'form':form})
 
     form = LoginForm(data=request.POST)
+    
     if form.is_valid():
+        
+        # 验证码的校验
+        user_input_code = form.cleaned_data.pop('code')
+        code = request.session.get('image_code', '')
+        if code.upper() != user_input_code.upper():
+            form.add_error('code', '验证码错误')
+            return render(request, 'login.html', {'form':form})
+
         admin_object = models.Admin.objects.filter(**form.cleaned_data).first()
         if not admin_object:
             form.add_error('password', '用户名或密码错误')
@@ -38,8 +58,28 @@ def login(request):
         
         # 用户名和密码正确
         request.session['info'] = {'id':admin_object.id, 'name':admin_object.username}
+        # session可以保存七天
+        request.session.set_expiry(60*60*24*7)
         return redirect('/admin/list/')
     return render(request, 'login.html', {'form':form})
     
+def image_code(request):
+    '''生成图片验证码'''
+    import sys
+    print(sys.path)
+    img, code_string = check_code()
 
+    # 写入到自己的session中（以便后续获取验证码再进行校验）
+    request.session['image_code'] = code_string
+    # 给session设置60秒超时
+    request.session.set_expiry(60)
 
+    stream = BytesIO()
+    img.save(stream, 'png')
+    return HttpResponse(stream.getvalue())
+
+def logout(request):
+    '''注销'''
+    
+    request.session.clear()
+    return redirect('/login/')
