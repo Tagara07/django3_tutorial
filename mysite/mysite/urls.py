@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import path
 from app01 import views as views01
 # from app02 import views as views02
-from app02.views import depart, user, pretty, admin, account
+from app02.views import depart, user, pretty, admin, account, task
 
 urlpatterns = [
     # path('admin/', admin.site.urls), 
@@ -56,4 +56,7 @@ urlpatterns = [
     path('login/', account.login),
     path('logout/', account.logout),
     path('image/code/', account.image_code),
+    # 任务管理
+    path('task/list/', task.task_list),
+    path('task/ajax/', task.task_ajax),
 ]
