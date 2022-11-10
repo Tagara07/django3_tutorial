@@ -24,6 +24,7 @@ def order_add(request):
     form = OrderModelForm(data=request.POST)
 
     if form.is_valid():
+        # 随机生成oid
         form.instance.oid = datetime.now().strftime('%Y%m%d%H%M%S') + str(random.randint(1000, 9999))
         form.save()
         return JsonResponse({"status": True})
