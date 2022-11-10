@@ -67,14 +67,14 @@ class Order(models.Model):
     '''工单'''
     oid = models.CharField(max_length=64, verbose_name="订单号")
     title = models.CharField(max_length=32, verbose_name="名称")
-    prince = models.IntegerField(verbose_name="价格")
+    price = models.IntegerField(verbose_name="价格")
 
-    status_choices = {
-        (1, "待支付"),
-        (2, "已支付"),
-    }
+    status_choices = (
+        (1, '待支付'),
+        (2, '已支付'),
+    )
+    status = models.SmallIntegerField(choices=status_choices, default=1, verbose_name='状态')
 
-    status = models.SmallIntegerField(choices=status_choices, default=1, verbose_name="状态")
     admin = models.ForeignKey(to='Admin', on_delete=models.CASCADE, verbose_name="管理员")
     
 

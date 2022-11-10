@@ -15,14 +15,26 @@
           <div class="modal-content">
             <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-              <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+              <h4 class="modal-title" id="myModalLabel">新建</h4>
             </div>
             <div class="modal-body">
-              ...
+              <form id="formAdd">
+                <div class='clearfix'>
+                    {% for field in form %}
+                        <div class='col-xs-6'>
+                            <div class="form-group" style="position: relative; margin-bottom: 20px">
+                                <label>{{ field.label }}</label>
+                                {{ field }}
+                                <span class="error-msg" style="color: red; position: absolute;"></span>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>  
+              </form>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-primary">Save changes</button>
+              <button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
+              <button id="btnSave" type="button" class="btn btn-primary">保 存</button>
             </div>
           </div>
         </div>
@@ -34,6 +46,7 @@
       <script type="text/javascript">
         $(function () {
             bindBtnAddEvent();
+            bindBtnSaveEvent();
         })
 
         function bindBtnAddEvent() {
@@ -42,6 +55,32 @@
                 $('#myModal').modal('show');
             });
         }
+
+        function bindBtnSaveEvent() {
+          $("#btnSave").click(function () {
+
+            $(".error-msg").empty();
+
+            $.ajax({
+                url: '/order/add/',
+                type:"post",
+                data: $("#formAdd").serialize(),
+                dataType: "JSON",
+                success: function(res) {
+                    if (res.status) {
+                        alert('添加成功');
+                    } else {
+                        console.log(res.error);
+                        $.each(res.error, function (name, errorList) {
+                            //console.log(name, data)
+                            $("#id_" + name).next().text(errorList[0]);
+                        })
+                    }
+                }
+            })
+          });
+        }
+
       </script>
 {% endblock js %}
 
