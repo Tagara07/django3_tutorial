@@ -68,7 +68,11 @@
                 dataType: "JSON",
                 success: function(res) {
                     if (res.status) {
-                        alert('添加成功');
+                        alert('创建成功');
+                        // 清空表单 $('#formAdd')是jQuery对象 -> $('#formAdd')[0] DOM对象
+                        $('#formAdd')[0].reset();
+                        // 关闭对话框
+                        $('#myModal').modal('hide');
                     } else {
                         console.log(res.error);
                         $.each(res.error, function (name, errorList) {
@@ -82,4 +86,4 @@
         }
 
       </script>
-{% endblock js %}
+{% endblock js %} 
