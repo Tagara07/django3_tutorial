@@ -85,4 +85,18 @@ def order_detail(request):
         'data': row_dict
         }
     return JsonResponse(result)
+
+@csrf_exempt
+def order_edit(requst):
+    '''编辑订单'''
+    uid = requst.GET.get('uid')
+    row_object = models.Order.objects.filter(id=uid).first()
+    if not row_object:
+        return JsonResponse({'status': False, 'tips': '数据不存在, 请刷新重试。'})
     
+    form = OrderModelForm(data=requst.POST, instance=row_object)
+    if form.is_valid():
+        form.save()
+        return JsonResponse({'status':True})
+
+    return JsonResponse({'status': False, 'error': form.errors})
