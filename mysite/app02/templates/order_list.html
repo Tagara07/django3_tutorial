@@ -38,7 +38,7 @@
                       <td>{{ obj.get_status_display }}</td> 
                       <td>{{ obj.admin.username }}</td> 
                       <td>
-                          <a class="btn btn-primary btn-xs" href="#">编辑</a>
+                          <input uid='{{ obj.id }}' type="button" class='btn btn-primary btn-xs btn-edit' value='编辑'>
                           <input uid='{{ obj.id }}' class="btn btn-danger btn-xs btn-delete" type="button" value='删 除'>
                       </td>
                   </tr>
@@ -54,7 +54,7 @@
     </div>
 
 
-    <!-- 新建订单(对话框) -->
+    <!-- 新建/编辑 订单(对话框) -->
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
@@ -111,10 +111,15 @@
             bindBtnSaveEvent();
             bindBtnDeleteEvent();
             bindBtnConfirmDeleteEvent(); 
+            bindBtnEditEvent(); 
         })
 
         function bindBtnAddEvent() {
             $("#btnAdd").click(function () {
+                // 清空对话框中的数据
+                $('#formAdd')[0].reset();
+                // 设置对话框的标题
+                $('myModalLabel').text('新建')
                 // 点击新建按钮，就显示对话框
                 $('#myModal').modal('show');
             });
@@ -196,6 +201,42 @@
                 }
               })
             })
+        }
+
+        function bindBtnEditEvent() {
+          $('.btn-edit').click(function () {
+            // 清空对话框中的数据
+            $('#formAdd')[0].reset();
+            
+            var uid = $(this).attr('uid');
+
+            // 发送Ajax去获取当前行的相关数据
+            $.ajax({
+              url: '/order/detail/',
+              type: 'get',
+              data: {
+                uid: uid
+              },
+              dataType: 'JSON',
+              success: function (res) {
+                //console.log(res);  
+                if (res.status) {
+                  //将数据复制到对话框中
+                  $.each(res.data, function (name, value) {
+                    $('#id_' + name).val(value);
+                  })
+
+                  // 修改对话框的标题
+                   $('#myModalLabel').text('编辑');
+                  // 点击编辑，显示对话框
+                  $('#myModal').modal('show');
+                } else {
+                  alert(res.error);
+                }
+              }
+            })
+            // 在对话框中默认看到
+          })
         }
       </script>
 {% endblock js %} 
