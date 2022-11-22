@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import path
 from app01 import views as views01
 # from app02 import views as views02
-from app02.views import depart, user, pretty, admin, account, task, order
+from app02.views import depart, user, pretty, admin, account, task, order, chart
 
 urlpatterns = [
     # path('admin/', admin.site.urls), 
@@ -66,4 +66,7 @@ urlpatterns = [
     path('order/delete/', order.order_delete),
     path('order/detail/', order.order_detail),
     path('order/edit/', order.order_edit),
+    # 数据统计
+    path('chart/list/', chart.chart_list),
+    path('chart/bar/', chart.chart_bar),
 ]

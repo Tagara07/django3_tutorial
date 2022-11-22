@@ -1,0 +1,90 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+{% block content %}
+    <div class='container'>
+        <div class="panel panel-default">
+            <div class="panel-heading">折线图</div>
+            <div class="panel-body">
+              图图图
+            </div>
+        </div>
+
+        <div class='row'>
+            <div class='col-sm-8'>
+                <div class="panel panel-default">
+                    <div class="panel-heading">柱状图</div>
+                    <div class="panel-body">    
+                        <div id='m2' style='width: 600px; height: 400px;'></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class='col-sm-4'>
+                <div class="panel panel-default">
+                    <div class="panel-heading">饼图</div>
+                    <div class="panel-body">
+                      图图图
+                    </div>
+                </div>
+            </div> 
+        </div>
+    </div>
+{% endblock content %}
+
+{% block js %}
+    <script src='{% static 'js/echarts.js' %}'></script>
+    <script type='text/javascript'>
+
+        $(function () {
+            initBar();
+        })
+
+        /*
+        * 初始化柱状体
+        */
+        function initBar() {
+            // 基于准备好的dom，初始化echarts实例
+            var myChart = echarts.init(document.getElementById('m2'));
+
+            // 指定图表的配置项和数据
+            var option = {
+            title: {
+                text:'员工业绩汇总信息',
+                subtext:'广西分公司',
+                textAlign:'auto',
+                left:'center',
+                
+
+            },
+            tooltip: {},
+            legend: {
+                data: [], // 后台获取
+                bottom:0
+            
+            },
+            xAxis: {
+                data: [] // 后台获取
+            },
+            yAxis: {},
+            series: [] // 后台获取
+            };
+
+            $.ajax({
+                url: '/chart/bar/',
+                type: 'get',
+                dataType:'JSON',
+                success:function (res) {
+                    // 将后台返回的数据，更新到option中
+                    if(res.status) {
+                        option.legend.data = res.data.legend;
+                        option.xAxis.data = res.data.x_axis;
+                        option.series = res.data.series_list;
+                    }
+                    // 使用刚指定的配置项和数据显示图表。
+                    myChart.setOption(option);
+                }
+            })
+        }
+    </script>
+{% endblock js %}
