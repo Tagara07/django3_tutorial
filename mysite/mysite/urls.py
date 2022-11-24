@@ -69,4 +69,7 @@ urlpatterns = [
     # 数据统计
     path('chart/list/', chart.chart_list),
     path('chart/bar/', chart.chart_bar),
+    path('chart/pie/', chart.chart_pie),
+    path('chart/line/', chart.chart_line),
+    path('chart/highcharts/', chart.highcharts),
 ]

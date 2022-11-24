@@ -92,7 +92,7 @@ def order_edit(requst):
     uid = requst.GET.get('uid')
     row_object = models.Order.objects.filter(id=uid).first()
     if not row_object:
-        return JsonResponse({'status': False, 'tips': '数据不存在, 请刷新重试。'})
+        return JsonResponse({'status': False, 'tips': '数据不存在, 请 刷新重试。'})
     
     form = OrderModelForm(data=requst.POST, instance=row_object)
     if form.is_valid():
