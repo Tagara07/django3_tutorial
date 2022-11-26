@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import path
 from app01 import views as views01
 # from app02 import views as views02
-from app02.views import depart, user, pretty, admin, account, task, order, chart
+from app02.views import depart, user, pretty, admin, account, task, order, chart, upload
 
 urlpatterns = [
     # path('admin/', admin.site.urls), 
@@ -72,4 +72,6 @@ urlpatterns = [
     path('chart/pie/', chart.chart_pie),
     path('chart/line/', chart.chart_line),
     path('chart/highcharts/', chart.highcharts),
+    # 上传文件
+    path('upload/list/', upload.upload_list ),
 ]
